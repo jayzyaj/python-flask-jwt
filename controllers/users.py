@@ -1,6 +1,7 @@
-from flask_restful import Resource, reqparse
+from flask_restplus import Resource, reqparse
 from models.users import UserModel, RevokedTokenModel
 from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_required, jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
+from run import api
 
 parser = reqparse.RequestParser()
 parser.add_argument('email', help = 'This field cannot be blank', required = True)
@@ -30,7 +31,7 @@ class UserRegistration(Resource):
         except:
             return {'message': 'Something went wrong'}, 500
 
-
+@api.doc(params={'email': 'An email of the user', 'password': 'Password of the user'})
 class UserLogin(Resource):
     def post(self):
         data = parser.parse_args()

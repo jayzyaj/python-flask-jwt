@@ -1,5 +1,5 @@
 from flask import Flask
-from flask_restful import Api
+from flask_restplus import Api, Namespace
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
@@ -23,8 +23,16 @@ def check_if_token_in_blacklist(decrypted_token):
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
-api = Api(app)
+authorizations = {
+    'Bearer Auth': {
+        'type': 'apiKey',
+        'in': 'header',
+        'name': 'Authorization'
+    },
+}
+api = Api(app, security='Bearer Auth', authorizations=authorizations)
 
+name_space = Namespace('main', description='Main APIs')
 app.run(host='0.0.0.0')
 
 from models import users
