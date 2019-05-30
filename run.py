@@ -1,11 +1,12 @@
 from flask import Flask
 from flask_restful import Api
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from flask_jwt_extended import JWTManager
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/spendid_api'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://localhost/cash_advance_api'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'some-secret-string'
 app.config['JWT_SECRET_KEY'] = 'jwt-secret-string'
@@ -20,12 +21,11 @@ def check_if_token_in_blacklist(decrypted_token):
     return users.RevokedTokenModel.is_jti_blacklisted(jti)
 
 db = SQLAlchemy(app)
-
-@app.before_first_request
-def create_tables():
-    db.create_all()
+migrate = Migrate(app, db)
 
 api = Api(app)
+
+app.run(host='0.0.0.0')
 
 from models import users
 from routes import users as user_route
