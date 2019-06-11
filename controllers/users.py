@@ -46,7 +46,8 @@ class UserLogin(Resource):
             return {
                 'message': 'Logged in as {}'.format(current_user.email),
                 'access_token': access_token,
-                'refresh_token': refresh_token
+                'refresh_token': refresh_token,
+                'user': current_user,
                 }, 200
         else:
             return {'message': 'Invalid credentials'}, 422

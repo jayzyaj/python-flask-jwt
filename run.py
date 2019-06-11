@@ -35,5 +35,5 @@ api = Api(app, security='Bearer Auth', authorizations=authorizations)
 name_space = Namespace('main', description='Main APIs')
 app.run(host='0.0.0.0')
 
-from models import users
+from models import users, bank_account
 from routes import users as user_route
